@@ -28,9 +28,10 @@ JVer is a lightweight Java version selector for Windows. It lets you pick which 
 
 | Command | Description |
 |---------|-------------|
-| `JVer list` | Show all JDKs and mark the persisted one. |
-| `JVer set`  | Interactive selector: choose number -> updates `JAVA_HOME` + `PATH` in Registry. |
-| `JVer current` | Show the currently persisted `JAVA_HOME` (as stored in Registry). |
+| `jver list` | Show all JDKs and mark the persisted one. |
+| `jver set`  | Interactive selector: choose number -> updates `JAVA_HOME` + `PATH` in Registry. |
+| `jver current` | Show the currently persisted `JAVA_HOME` (as stored in Registry). |
+| `jver version` | Show the version of jver. |
 
 
 
