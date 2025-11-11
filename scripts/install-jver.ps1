@@ -40,11 +40,67 @@ function Install-Jver {
     Write-Host "jver.exe already exists. Use -Force to overwrite." -ForegroundColor Yellow
   } else {
     Write-Host "==> Downloading $($asset.browser_download_url)" -ForegroundColor Cyan
-    try {
-      Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $downloadPath -UseBasicParsing -ErrorAction Stop
-    } catch {
-      Write-Error "Download failed: $_"; return
+
+    function Download-FileWithProgress {
+      param(
+        [string]$Url,
+        [string]$OutFile
+      )
+
+      try {
+        $handler = New-Object System.Net.Http.HttpClientHandler
+        $handler.AutomaticDecompression = [System.Net.DecompressionMethods]::GZip -bor [System.Net.DecompressionMethods]::Deflate
+        $client = [System.Net.Http.HttpClient]::new($handler)
+        $client.DefaultRequestHeaders.UserAgent.ParseAdd('jver-installer')
+
+        $respTask = $client.GetAsync($Url, [System.Net.Http.HttpCompletionOption]::ResponseHeadersRead)
+        $respTask.Wait()
+        $resp = $respTask.Result
+        if (-not $resp.IsSuccessStatusCode) { throw "HTTP $($resp.StatusCode)" }
+
+        $total = $resp.Content.Headers.ContentLength
+        $streamTask = $resp.Content.ReadAsStreamAsync()
+        $streamTask.Wait()
+        $stream = $streamTask.Result
+
+        $fs = [System.IO.File]::Open($OutFile, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+        try {
+          $buffer = New-Object byte[] 81920
+          $read = 0
+          $downloaded = 0
+          while (($read = $stream.Read($buffer, 0, $buffer.Length)) -gt 0) {
+            $fs.Write($buffer, 0, $read)
+            $downloaded += $read
+            if ($total) {
+              $percent = [int](($downloaded / $total) * 100)
+            } else {
+              $percent = 0
+            }
+            Write-Progress -Activity "Downloading jver.exe" -Status ("{0:N1} MB" -f ($downloaded/1MB)) -PercentComplete $percent
+          }
+        } finally {
+          $fs.Close()
+          $stream.Close()
+        }
+        Write-Progress -Activity "Downloading jver.exe" -Completed -Status "Completed"
+        return $true
+      } catch {
+        return $false
+      } finally {
+        if ($client) { $client.Dispose() }
+      }
     }
+
+    $ok = Download-FileWithProgress -Url $asset.browser_download_url -OutFile $downloadPath
+    if (-not $ok) {
+      Write-Warning "Download with progress failed, trying fallback..."
+      try {
+        Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $downloadPath -UseBasicParsing -ErrorAction Stop
+      } catch {
+        Write-Error "Download failed: $_"; return
+      }
+    }
+
     if (-not (Test-Path $downloadPath)) { Write-Error "Download failed (file missing)."; return }
     Write-Host "==> Download complete." -ForegroundColor Green
   }

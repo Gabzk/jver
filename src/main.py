@@ -164,5 +164,3 @@ def update_java(jdk_path: Path):
 
 if __name__ == "__main__":
     app()
-
-
