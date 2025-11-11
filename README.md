@@ -46,16 +46,13 @@ JVer is a lightweight Java version selector for Windows. It lets you pick which 
 Once releases are published (tag push `vX.Y.Z`), you can install without Python:
 
 ```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
-Invoke-WebRequest -UseBasicParsing -Uri https://raw.githubusercontent.com/Gabzk/jver/main/scripts/install-jver.ps1 -OutFile install-jver.ps1
-pwsh .\install-jver.ps1  # downloads latest jver.exe and adds to PATH
+powershell -ExecutionPolicy Bypass -NoProfile -Command "iex (iwr -useb 'https://raw.githubusercontent.com/Gabzk/jver/main/scripts/install-jver.ps1')"
 ```
 
-To uninstall:
+To uninstall (one line):
 
 ```powershell
-Invoke-WebRequest -UseBasicParsing -Uri https://raw.githubusercontent.com/Gabzk/jver/main/scripts/uninstall-jver.ps1 -OutFile uninstall-jver.ps1
-pwsh .\uninstall-jver.ps1
+powershell -ExecutionPolicy Bypass -NoProfile -Command "iex (iwr -useb 'https://raw.githubusercontent.com/Gabzk/jver/main/scripts/uninstall-jver.ps1')"
 ```
 
 ## Roadmap / Ideas
