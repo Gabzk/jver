@@ -1,0 +1,55 @@
+# Byte-compiled / caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments (Poetry often uses .venv in project root)
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+.env
+
+# Packaging / build artifacts
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+.wheels/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Cache / tooling
+.mypy_cache/
+.ruff_cache/
+.pyre/
+
+# Logs / temp
+pip-log.txt
+pip-delete-this-directory.txt
+*.log
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.swp
+*~
