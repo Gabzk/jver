@@ -8,6 +8,8 @@ from rich.table import Table
 from rich import box
 import winreg
 
+VERSION = "0.2.0"
+
 app = typer.Typer()
 console = Console()
 JAVA_DIR = Path("C:/Program Files/Java")
@@ -161,6 +163,11 @@ def update_java(jdk_path: Path):
         except Exception as e:
             console.print(f"\n[bold red]✗ Failed to change JAVA_HOME: {e}[/bold red]")
             console.print("[yellow]Try running as administrator or check your permissions.[/yellow]")
+
+@app.command("version")
+def version_command():
+    """Show the version of jver."""
+    console.print(f"[bold green]jver {VERSION}[/bold green]")
 
 if __name__ == "__main__":
     app()

@@ -136,7 +136,7 @@ function Install-Jver {
     Write-Host "Skipped PATH modification (user chose -SkipPath)." -ForegroundColor DarkGray
   }
 
-  Write-Host "==> Done. Try:  jver list" -ForegroundColor Green
+  Write-Host "==> Done. Try:  jver version" -ForegroundColor Green
 }
 
 # Auto-run only if not already defined in current session (prevents duplicate when re-sourcing)
